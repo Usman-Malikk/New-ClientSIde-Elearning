@@ -96,12 +96,7 @@ const Dashboard = () => {
                       Create Course
                     </button>
                   </DropdownItem>
-                  {/* <DropdownItem>
-                    <button className="join-create-btn" onClick={() => setShowJoin(true)}>
-                      <AddIcon className="pe-1 mb-1"></AddIcon>
-                      Join Class
-                    </button>
-                  </DropdownItem> */}
+              
                 </DropdownMenu>
               </Dropdown>
             </div>

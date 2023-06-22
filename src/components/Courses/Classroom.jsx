@@ -302,7 +302,11 @@ const Course = () => {
                           onClick={() => setShow(true)}
                         >
                           <AddRoundedIcon
-                            style={{ fontSize: "28px", margin: "20px,20px", padding :"20px,20px,20px" }}
+                            style={{
+                              fontSize: "28px",
+                              margin: "20px,20px",
+                              padding: "20px,20px,20px",
+                            }}
                           />
                           Create Assignment
                         </Button>
@@ -321,7 +325,12 @@ const Course = () => {
                           onClick={() => setShowContent(true)}
                         >
                           <AddRoundedIcon
-                            style={{ fontSize: "28px", margintop: "20px", paddingtop :"1.5rem",paddingBottom:"1rem" }}
+                            style={{
+                              fontSize: "28px",
+                              margintop: "20px",
+                              paddingtop: "1.5rem",
+                              paddingBottom: "1rem",
+                            }}
                           />
                           Add Course Content
                         </Button>

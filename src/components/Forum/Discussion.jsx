@@ -60,7 +60,7 @@ const Discussion = () => {
 
   // Socket Receive Message
   socket.on("messages", (messgaes) => {
-    // console.log("messgae is here", messgaes);
+    console.log("messgae is here", messgaes);
     setPosts([...posts, messgaes].reverse());
   });
 
@@ -108,10 +108,8 @@ const Discussion = () => {
       });
     } else {
       const unixTimestamp = Date.now();
-
       // Create a new Date object using the Unix timestamp
       const dateObj = new Date(unixTimestamp);
-
       // Use the Date object's built-in methods to extract the date components
       const year = dateObj.getUTCFullYear();
       const month = String(dateObj.getUTCMonth() + 1).padStart(2, "0");
@@ -123,10 +121,8 @@ const Discussion = () => {
         3,
         "0"
       );
-
       // Create the formatted date string
       const formattedDate = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.${milliseconds}Z`;
-
       socket.emit("msg", {
         _id: "XXXXXX",
         createdAt: formattedDate,

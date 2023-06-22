@@ -102,7 +102,7 @@ const Header = () => {
         <div className="container-fluid">
           <>
             <NavLink to="/" className="navbar-brand ms-5 fw-bold" href="#">
-              Wakeel's Space
+              E-Learning 
             </NavLink>
             <button
               className="navbar-toggler"
