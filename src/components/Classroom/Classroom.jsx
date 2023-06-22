@@ -86,7 +86,7 @@ const Classroom = () => {
         .post(
           "http://localhost:5000/classes/getReminders",
           {
-            userEmail: storeData.userEmail,
+            userEmail: storeData.userEmai,
           },
           { headers: { Authorization: "Bearer " + storeData.token } }
         )
@@ -111,7 +111,6 @@ const Classroom = () => {
           setReminderLoading(false);
         })
         .catch((err) => {
-          console.log(err);
           setReminderLoading(false);
         });
     }

@@ -4,7 +4,7 @@ import PermIdentityIcon from "@material-ui/icons/PermIdentity";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
 import AssignmentIcon from "@material-ui/icons/Assignment";
-import ClassIcon from '@material-ui/icons/Class';
+import ClassIcon from "@material-ui/icons/Class";
 import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
 import clsx from "clsx";
@@ -67,7 +67,7 @@ const CreateResource = (props) => {
   const [values, setValues] = useState({
     name: "",
     description: "",
-    dueDate: ""
+    dueDate: "",
   });
 
   const [loading, setLoading] = useState(false);
@@ -81,25 +81,24 @@ const CreateResource = (props) => {
     e.preventDefault();
 
     if (!fileInput) return;
-
     setLoading(true);
-    const fileName = new Date().getTime() + "-" + fileInput.fileInput.name;
-    const uploadTask = storage
-      .ref(`assignments/${fileName}`)
-      .put(fileInput.fileInput);
-    uploadTask.on("state_changed", console.log, console.error, () => {
-      storage
-        .ref("assignments")
-        .child(fileName)
-        .getDownloadURL()
-        .then((firebaseURL) => {
-          return axios.post(
+    let formData = new FormData();
+    formData.append("file", fileInput?.fileInput);
+    axios
+      .post("http://localhost:5000/uploadFile", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((res) => {
+        axios
+          .post(
             "http://localhost:5000/resources/createResource",
             {
+              fileLink: res.data.file.file,
               name: values.name,
               desc: values.description,
               fieldName: values.fieldName,
-              fileLink: firebaseURL,
               creatorEmail: userData.userEmail,
             },
             {
@@ -107,20 +106,20 @@ const CreateResource = (props) => {
                 Authorization: "Bearer " + userData.token,
               },
             }
-          );
-        })
-        .then((res) => {
-          props.setShow(false);
-          setLoading(false);
-          console.log(props);
-          props.setIsAssignmentCreated(true);
-        })
-        .catch((err) => {
-          console.log(err);
-          props.setShow(false);
-          setLoading(false);
-        });
-    });
+          )
+          .then((res) => {
+            props.callResources();
+            props.setShow(false);
+            setLoading(false);
+            console.log(props);
+            props.setIsAssignmentCreated(true);
+          })
+          .catch((err) => {
+            console.log(err);
+            props.setShow(false);
+            setLoading(false);
+          });
+      });
   };
 
   const handleChange = (prop) => (event) => {
@@ -225,27 +224,28 @@ const CreateResource = (props) => {
                         }
                       />
                     </FormControl>
-                    <FormControl className={clsx(classes.margin, classes.textField)}>
-                                <InputLabel htmlFor="field"></InputLabel>
-                                <Input
-                                    style={{marginBottom:"10px"}}
-                                    placeholder="Enter Field Name"
-                                    fullWidth
-                                    id="field"
-                                    type="text"
-                                    margin="normal"
-                                    required
-                                    value={values.fieldName}
-                                    onChange={handleChange("fieldName")}
-                                    startAdornment={
-                                        <InputAdornment position="start">
-                                            <ClassIcon />
-                                            {/* <SubjectIcon /> */}
-                                        </InputAdornment>
-                                    }
-                                />
-                            </FormControl>
-                    
+                    <FormControl
+                      className={clsx(classes.margin, classes.textField)}
+                    >
+                      <InputLabel htmlFor="field"></InputLabel>
+                      <Input
+                        style={{ marginBottom: "10px" }}
+                        placeholder="Enter Field Name"
+                        fullWidth
+                        id="field"
+                        type="text"
+                        margin="normal"
+                        required
+                        value={values.fieldName}
+                        onChange={handleChange("fieldName")}
+                        startAdornment={
+                          <InputAdornment position="start">
+                            <ClassIcon />
+                            {/* <SubjectIcon /> */}
+                          </InputAdornment>
+                        }
+                      />
+                    </FormControl>
 
                     <FormControl
                       className={clsx(classes.margin, classes.textField)}
@@ -273,13 +273,11 @@ const CreateResource = (props) => {
                         {pdfFileError}
                       </div>
                     )}
-                    {
-                      loading ? (
-                        <div className="d-flex justify-content-center mt-4">
-                          <CircularProgress />
-                        </div>
-                      ) : null
-                    }
+                    {loading ? (
+                      <div className="d-flex justify-content-center mt-4">
+                        <CircularProgress />
+                      </div>
+                    ) : null}
                     {!error ? (
                       <button
                         type="submit"
